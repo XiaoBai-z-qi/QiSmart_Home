@@ -14,7 +14,7 @@
 - [ ] 创建2个测试任务（LED闪烁、串口打印）
 - [ ] 配置任务优先级和堆栈大小
 - [ ] 测试任务调度是否正常
-- [ ] 建立项目文件夹结构（App/BSP/Modules/System）
+- [x] 建立项目文件夹结构（App/BSP/Modules/System）
 
 ### 第3天：TFT液晶屏驱动
 - [ ] 配置SPI1接口（带DMA）用于TFT屏
