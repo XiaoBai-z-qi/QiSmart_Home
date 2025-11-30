@@ -1,15 +1,15 @@
 #include "bsp_log.h"
-#include "FreeRTOS.h"
-#include "queue.h"
-#include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
+
 
 #define LOG_TASK_STACK_SIZE  1024     // 日志任务堆栈大小
 #define LOG_MAX_LEN 128     //单条日志最大长度
 
 static UART_HandleTypeDef *g_uart;
 static QueueHandle_t logQueue;      //日志队列
+
+static const char *level_str[] = {
+    "INFO", "WARN", "DEBUG", "ERROR"
+};
 
 typedef struct{
     char buff[LOG_MAX_LEN];
@@ -40,4 +40,20 @@ void Log_Print(const char *str)
     LogItem item;
     snprintf(item.buff, LOG_MAX_LEN, "%s\r\n", str);
     xQueueSend(logQueue, &item, 0); //发送日志到队列
+}
+
+
+void Log_PrintEx(LogLevel level, const char *file, int line, const char *fmt, ...)
+{
+    LogItem item;
+    char text[96];
+
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(text, sizeof(text), fmt, args);
+    va_end(args);
+
+    snprintf(item.buff, LOG_MAX_LEN,"[%s][%s:%d] %s\r\n",level_str[level], file, line, text);
+
+    xQueueSend(logQueue, &item, 0);
 }

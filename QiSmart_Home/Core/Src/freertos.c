@@ -117,7 +117,13 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    Log_Print("hello freertos......");
+    LOG_INFO("This is INFO...");
+    osDelay(500);
+    LOG_WARN("This is WARN...");
+    osDelay(500);
+    LOG_ERROR("This is ERROR...");
+    osDelay(500);
+    LOG_DEBUG("This is DEBUG...");
     osDelay(500);
   }
   /* USER CODE END StartDefaultTask */
