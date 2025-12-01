@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "bsp_log.h"
+#include "encoder_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -114,17 +115,15 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+  int16_t starval;
   /* Infinite loop */
   for(;;)
   {
-    LOG_INFO("This is INFO...");
-    osDelay(500);
-    LOG_WARN("This is WARN...");
-    osDelay(500);
-    LOG_ERROR("This is ERROR...");
-    osDelay(500);
-    LOG_DEBUG("This is DEBUG...");
-    osDelay(500);
+    if(xQueueReceive(encoderQueueHandle, &starval, portMAX_DELAY) == pdTRUE)
+    {
+      LOG_INFO("Received encoder value: %ld", starval);
+    }
+    vTaskDelay(pdMS_TO_TICKS(10));
   }
   /* USER CODE END StartDefaultTask */
 }
