@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "bsp_log.h"
 #include "encoder_task.h"
+#include "sensor_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -116,12 +117,17 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
   int16_t starval;
+  uint16_t recvSensor;
   /* Infinite loop */
   for(;;)
   {
-    if(xQueueReceive(encoderQueueHandle, &starval, portMAX_DELAY) == pdTRUE)
+    if(xQueueReceive(encoderQueueHandle, &starval, 0) == pdTRUE)
     {
-      LOG_INFO("Received encoder value: %ld", starval);
+        LOG_INFO("Received encoder value: %ld", starval);
+    }
+    if(xQueueReceive(SensorQueueHandle, &recvSensor, 0) == pdTRUE)
+    {
+        LOG_INFO("Received sensor value: %d", recvSensor);
     }
     vTaskDelay(pdMS_TO_TICKS(10));
   }
