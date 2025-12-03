@@ -1029,6 +1029,18 @@
         </Group>
         <Group>
           <GroupName>System</GroupName>
+          <Files>
+            <File>
+              <FileName>sys_delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\sys_delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>sys_delay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\sys_delay.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Modules</GroupName>
@@ -1042,19 +1054,9 @@
               <FilePath>..\BSP\bsp_log.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_log.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\BSP\bsp_log.h</FilePath>
-            </File>
-            <File>
               <FileName>bsp_st7735.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\bsp_st7735.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_st7735.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\BSP\bsp_st7735.h</FilePath>
             </File>
             <File>
               <FileName>bsp_encoder.c</FileName>
@@ -1062,9 +1064,14 @@
               <FilePath>..\BSP\bsp_encoder.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_encoder.h</FileName>
+              <FileName>bsp_dht11.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\bsp_dht11.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_dht11.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\BSP\bsp_encoder.h</FilePath>
+              <FilePath>..\BSP\bsp_dht11.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1077,19 +1084,19 @@
               <FilePath>..\APP\encoder_task.c</FilePath>
             </File>
             <File>
-              <FileName>encoder_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\APP\encoder_task.h</FilePath>
-            </File>
-            <File>
               <FileName>sensor_task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\APP\sensor_task.c</FilePath>
             </File>
             <File>
-              <FileName>sensor_task.h</FileName>
+              <FileName>dht11_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\dht11_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>dht11_task.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\APP\sensor_task.h</FilePath>
+              <FilePath>..\APP\dht11_task.h</FilePath>
             </File>
           </Files>
         </Group>

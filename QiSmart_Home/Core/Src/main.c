@@ -29,8 +29,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "bsp_log.h"
+#include "sys_delay.h"
 #include "encoder_task.h"
 #include "sensor_task.h"
+#include "dht11_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,9 +103,11 @@ int main(void)
   MX_TIM2_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+  DWT_Init();
   Log_TaskCreate(&huart1);
   Encoder_TaskCreate(&htim2);
   Sensor_TaskCreate(&hadc1);
+  DHT11_TaskCreate();
   /* USER CODE END 2 */
 
   /* Init scheduler */

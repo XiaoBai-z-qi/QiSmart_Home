@@ -47,7 +47,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+extern uint8_t humidity, temperature;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -121,15 +121,8 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    if(xQueueReceive(encoderQueueHandle, &starval, 0) == pdTRUE)
-    {
-        LOG_INFO("Received encoder value: %ld", starval);
-    }
-    if(xQueueReceive(SensorQueueHandle, &recvSensor, 0) == pdTRUE)
-    {
-        LOG_INFO("Received sensor value: %d", recvSensor);
-    }
-    vTaskDelay(pdMS_TO_TICKS(10));
+    LOG_INFO("humidity: %d, temperature: %d", humidity, temperature);
+    vTaskDelay(pdMS_TO_TICKS(500));
   }
   /* USER CODE END StartDefaultTask */
 }
