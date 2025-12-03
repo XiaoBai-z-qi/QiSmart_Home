@@ -33,6 +33,7 @@
 #include "encoder_task.h"
 #include "sensor_task.h"
 #include "dht11_task.h"
+#include "relay_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,6 +109,7 @@ int main(void)
   Encoder_TaskCreate(&htim2);
   Sensor_TaskCreate(&hadc1);
   DHT11_TaskCreate();
+	Relay_TaskCreate();
   /* USER CODE END 2 */
 
   /* Init scheduler */

@@ -1068,11 +1068,6 @@
               <FileType>1</FileType>
               <FilePath>..\BSP\bsp_dht11.c</FilePath>
             </File>
-            <File>
-              <FileName>bsp_dht11.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\BSP\bsp_dht11.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1094,9 +1089,14 @@
               <FilePath>..\APP\dht11_task.c</FilePath>
             </File>
             <File>
-              <FileName>dht11_task.h</FileName>
+              <FileName>relay_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\relay_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>relay_task.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\APP\dht11_task.h</FilePath>
+              <FilePath>..\APP\relay_task.h</FilePath>
             </File>
           </Files>
         </Group>

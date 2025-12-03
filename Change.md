@@ -31,6 +31,7 @@
 ## 12-3 加入DHT11模块驱动
 
 - 加入DHT11底层和任务
+- 加入命令队列控制继电器任务
 
 ### 目前自定义任务：
 
@@ -41,6 +42,8 @@
 ==Sensor_Task 堆栈大小：64 优先级：osPriorityNormal1==
 
 ==DHT11_Task 堆栈大小：128 优先级：osPriorityNormal2==
+
+==Relay_Task 堆栈大小：128 优先级：osPriorityNormal2==
 
 
 

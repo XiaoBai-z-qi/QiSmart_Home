@@ -28,6 +28,7 @@
 #include "bsp_log.h"
 #include "encoder_task.h"
 #include "sensor_task.h"
+#include "relay_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,6 +49,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 extern uint8_t humidity, temperature;
+extern QueueHandle_t RelayQueue;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -121,8 +123,45 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    LOG_INFO("humidity: %d, temperature: %d", humidity, temperature);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    RelayMessage_t msg;
+
+    // 🔹第一个继电器亮 200ms
+    msg.relayId = 0;
+    msg.relayCmd = RELAY_ON;
+    xQueueSend(RelayQueue, &msg, 0);
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    msg.relayCmd = RELAY_OFF;
+    xQueueSend(RelayQueue, &msg, 0);
+
+    // 🔹第二个继电器亮 200ms
+    msg.relayId = 1;
+    msg.relayCmd = RELAY_ON;
+    xQueueSend(RelayQueue, &msg, 0);
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    msg.relayCmd = RELAY_OFF;
+    xQueueSend(RelayQueue, &msg, 0);
+
+    // 🔹两个全亮 200ms
+    msg.relayId = 0;
+    msg.relayCmd = RELAY_ON;
+    xQueueSend(RelayQueue, &msg, 0);
+
+    msg.relayId = 1;
+    msg.relayCmd = RELAY_ON;
+    xQueueSend(RelayQueue, &msg, 0);
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
+    // 可选: 全部关闭，避免持续亮
+    msg.relayId = 0;
+    msg.relayCmd = RELAY_OFF;
+    xQueueSend(RelayQueue, &msg, 0);
+
+    msg.relayId = 1;
+    msg.relayCmd = RELAY_OFF;
+    xQueueSend(RelayQueue, &msg, 0);
+
+    vTaskDelay(pdMS_TO_TICKS(1000)); // 原本的间隔
   }
   /* USER CODE END StartDefaultTask */
 }
