@@ -1025,6 +1025,11 @@
               <FileType>1</FileType>
               <FilePath>..\Devices\fonts.c</FilePath>
             </File>
+            <File>
+              <FileName>m_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Devices\m_config.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1067,6 +1072,16 @@
               <FileName>bsp_dht11.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\bsp_dht11.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_esp8266.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\bsp_esp8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_esp8266.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BSP\bsp_esp8266.h</FilePath>
             </File>
           </Files>
         </Group>

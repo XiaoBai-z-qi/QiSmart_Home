@@ -29,6 +29,7 @@
 #include "encoder_task.h"
 #include "sensor_task.h"
 #include "relay_task.h"
+#include "bsp_esp8266.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -75,7 +76,8 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
   */
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
-
+	
+  ESP_InitStreamBuffer();
   /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -118,48 +120,21 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
-  int16_t starval;
-  uint16_t recvSensor;
+  if(ESP_Init() == true)
+    LOG_INFO("ok");
+  else
+    LOG_ERROR("error");
+
+
+  if(ESP_WIFIConnect(2000) == true)
+    LOG_INFO("ok");
+  else
+    LOG_ERROR("error");
+    
   /* Infinite loop */
   for(;;)
   {
-    RelayMessage_t msg;
-
-    // 🔹第一个继电器亮 200ms
-    msg.relayId = 0;
-    msg.relayCmd = RELAY_ON;
-    xQueueSend(RelayQueue, &msg, 0);
-    vTaskDelay(pdMS_TO_TICKS(1000));
-    msg.relayCmd = RELAY_OFF;
-    xQueueSend(RelayQueue, &msg, 0);
-
-    // 🔹第二个继电器亮 200ms
-    msg.relayId = 1;
-    msg.relayCmd = RELAY_ON;
-    xQueueSend(RelayQueue, &msg, 0);
-    vTaskDelay(pdMS_TO_TICKS(1000));
-    msg.relayCmd = RELAY_OFF;
-    xQueueSend(RelayQueue, &msg, 0);
-
-    // 🔹两个全亮 200ms
-    msg.relayId = 0;
-    msg.relayCmd = RELAY_ON;
-    xQueueSend(RelayQueue, &msg, 0);
-
-    msg.relayId = 1;
-    msg.relayCmd = RELAY_ON;
-    xQueueSend(RelayQueue, &msg, 0);
-
-    vTaskDelay(pdMS_TO_TICKS(1000));
-
-    // 可选: 全部关闭，避免持续亮
-    msg.relayId = 0;
-    msg.relayCmd = RELAY_OFF;
-    xQueueSend(RelayQueue, &msg, 0);
-
-    msg.relayId = 1;
-    msg.relayCmd = RELAY_OFF;
-    xQueueSend(RelayQueue, &msg, 0);
+    
 
     vTaskDelay(pdMS_TO_TICKS(1000)); // 原本的间隔
   }
