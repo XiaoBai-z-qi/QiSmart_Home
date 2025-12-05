@@ -1,13 +1,14 @@
 #include "bsp_esp8266.h"
+#include "bsp_log.h"
 #include "m_config.h"
 StreamBufferHandle_t espRxStreamBuffer = NULL;
 uint8_t rx_char;
-
+const  char* pubtopic="$sys/Ez68Tg4NJD/device-001/thing/property/post";
 void ESP_InitStreamBuffer(void)
 {
-	HAL_UART_Receive_IT(ESP8266_UART, &rx_char, 1);
+	  HAL_UART_Receive_IT(ESP8266_UART, &rx_char, 1);
     //创建流缓冲区，256字节 触发level = 1 表示有1个字节就能读取
-    espRxStreamBuffer = xStreamBufferCreate(256, 1);
+    espRxStreamBuffer = xStreamBufferCreate(384, 1);
 }
 
 bool ESP_SendCmd(char *cmd, char *ack, uint32_t timeout)
@@ -19,7 +20,7 @@ bool ESP_SendCmd(char *cmd, char *ack, uint32_t timeout)
     xStreamBufferReset(espRxStreamBuffer);
 
     //发送命令
-    HAL_UART_Transmit(ESP8266_UART, (uint8_t*)cmd, strlen(cmd), 100);
+    HAL_UART_Transmit_IT(ESP8266_UART, (uint8_t*)cmd, strlen(cmd));
 
     TickType_t start_tick = xTaskGetTickCount();
     TickType_t max_wait = pdMS_TO_TICKS(timeout);
@@ -59,27 +60,54 @@ bool ESP_SendCmd(char *cmd, char *ack, uint32_t timeout)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    if(huart == ESP8266_UART)
+    if(huart == ESP8266_UART && espRxStreamBuffer)
     {
-        if(espRxStreamBuffer!= NULL)
-        {
-            xStreamBufferSendFromISR(espRxStreamBuffer, &rx_char, 1, NULL);
-        }
-        
-        HAL_UART_Receive_IT(ESP8266_UART, &rx_char, 1);
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        xStreamBufferSendFromISR(espRxStreamBuffer, &rx_char, 1, &xHigherPriorityTaskWoken);
+        HAL_UART_Receive_IT(ESP8266_UART, &rx_char, 1);   // 重新启动中断
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
 }
 
 bool ESP_Init(void)
 {
-    if(!ESP_SendCmd(AT_CMD_TEST, AT_ACK_OK, 200))   return false;
-    if(!ESP_SendCmd(AT_SET_STA, AT_ACK_OK, 200))    return false;
+    if(!ESP_SendCmd(CMD_AT, ACK_OK, 200))                   return false;
+		vTaskDelay(pdMS_TO_TICKS(500));
+
+    if(!ESP_SendCmd(CMD_RST, "", 200))                      return false;
+		vTaskDelay(pdMS_TO_TICKS(500));
+
+    if(!ESP_SendCmd(CMD_CWMOED, ACK_OK, 200))               return false;
+		vTaskDelay(pdMS_TO_TICKS(500));
+
+	  if(!ESP_SendCmd(ESP8266_DHTP, ACK_OK, 200))               return false;
+		vTaskDelay(pdMS_TO_TICKS(500));
+
+    if(!ESP_SendCmd(ESP8266_WIFI_CONFIG, ACK_OK, 2000))     return false;
+		vTaskDelay(pdMS_TO_TICKS(500));
+
+    if(!ESP_SendCmd(MQTT_USERCFG, ACK_OK, 2000))               return false;
+
+		vTaskDelay(pdMS_TO_TICKS(500));
+    if(!ESP_SendCmd(MQTT_CONN, ACK_OK, 8000))            return false;
+
     return true;
 }
 
-bool ESP_WIFIConnect(uint16_t timeout)
+bool MQTT_SendDate(const char *str, uint8_t date)
 {
-    char cmd[100] = {0};
-    snprintf(cmd, sizeof(cmd), AT_CWJAP, WIFI_SSID, WIFI_PASSWD);
-    return ESP_SendCmd(cmd, AT_ACK_OK, timeout);
+	char cmdbuf[384] = {0};
+  	sprintf(cmdbuf, "AT+MQTTPUB=0,\"%s\",\"{\\\"id\\\":\\\"123\\\"\\,\\\"params\\\":{\\\"%s\\\":{\\\"value\\\":%d}\\}}\",0,0\r\n",pubtopic, str, date);
+	return ESP_SendCmd(cmdbuf, ACK_OK, 2000);
 }
+
+bool MQTT_SendTempHumi(int16_t temp, uint16_t humi)
+{
+  char cmdbuf[384] = {0};
+  sprintf(cmdbuf, "AT+MQTTPUB=0,\"%s\",\"{\\\"id\\\":\\\"123\\\"\\,\\\"params\\\":{\\\"temperature\\\":{\\\"value\\\":%d}\\,\\\"humidity\\\":{\\\"value\\\":%d}\\}}\",0,0\r\n",pubtopic, temp, humi);
+  return ESP_SendCmd(cmdbuf, ACK_OK, 2000);
+}
+
+
+
+

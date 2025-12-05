@@ -34,6 +34,7 @@
 #include "sensor_task.h"
 #include "dht11_task.h"
 #include "relay_task.h"
+#include "mqtt_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -107,10 +108,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   DWT_Init();
   Log_TaskCreate(&huart1);
-  Encoder_TaskCreate(&htim2);
-  Sensor_TaskCreate(&hadc1);
+//  Encoder_TaskCreate(&htim2);
+//  Sensor_TaskCreate(&hadc1);
   DHT11_TaskCreate();
 	Relay_TaskCreate();
+  MQTT_TaskCreate();
   /* USER CODE END 2 */
 
   /* Init scheduler */

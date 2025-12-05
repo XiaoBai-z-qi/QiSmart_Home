@@ -16,10 +16,12 @@ void Relay_Task(void *arg)
     RelayMessage_t msg;
     while(1)
     {
-        if(xQueueReceive(RelayQueue, &msg, portMAX_DELAY) == pdTRUE)
-        {
-            Relay_Control(&msg);
-        }
+        // if(xQueueReceive(RelayQueue, &msg, portMAX_DELAY) == pdTRUE)
+        // {
+        //     Relay_Control(&msg);
+        // }
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8);
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
 

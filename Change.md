@@ -54,3 +54,20 @@
 
 
 
+## 12-5 加入连接上MQTT的逻辑并在没有订阅的前提下发送温湿度数据
+
+- 加入MQTT_Task任务
+
+- ### 目前自定义任务：
+
+  ==Log_Task  堆栈大小：1024  优先级：1==
+
+  ==Encoder_Task 堆栈大小：128 优先级：osPriorityNormal2==
+
+  ==Sensor_Task 堆栈大小：64 优先级：osPriorityNormal1==
+
+  ==DHT11_Task 堆栈大小：128 优先级：osPriorityNormal2==
+
+  ==Relay_Task 堆栈大小：128 优先级：osPriorityNormal2==
+
+  ==MQTT_Task  堆栈大小：1024  优先级：1==

@@ -30,6 +30,7 @@
 #include "sensor_task.h"
 #include "relay_task.h"
 #include "bsp_esp8266.h"
+#include "mqtt_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,14 +50,14 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-extern uint8_t humidity, temperature;
+
 extern QueueHandle_t RelayQueue;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 128 * 4,
+  .stack_size = 128,
   .priority = (osPriority_t) osPriorityNormal,
 };
 
@@ -78,6 +79,7 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 	
   ESP_InitStreamBuffer();
+	
   /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -120,23 +122,14 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
-  if(ESP_Init() == true)
-    LOG_INFO("ok");
-  else
-    LOG_ERROR("error");
-
-
-  if(ESP_WIFIConnect(2000) == true)
-    LOG_INFO("ok");
-  else
-    LOG_ERROR("error");
-    
+  
+	uint8_t temp = 0;
   /* Infinite loop */
   for(;;)
   {
     
 
-    vTaskDelay(pdMS_TO_TICKS(1000)); // 原本的间隔
+    vTaskDelay(pdMS_TO_TICKS(2000)); // 原本的间隔
   }
   /* USER CODE END StartDefaultTask */
 }

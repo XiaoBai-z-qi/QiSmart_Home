@@ -1109,9 +1109,14 @@
               <FilePath>..\APP\relay_task.c</FilePath>
             </File>
             <File>
-              <FileName>relay_task.h</FileName>
+              <FileName>mqtt_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\mqtt_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>mqtt_task.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\APP\relay_task.h</FilePath>
+              <FilePath>..\APP\mqtt_task.h</FilePath>
             </File>
           </Files>
         </Group>
